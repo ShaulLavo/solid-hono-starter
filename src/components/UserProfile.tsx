@@ -14,29 +14,27 @@ export function User() {
 	const user = () => session().data?.user
 	const hasSession = () => Boolean(session()?.data)
 	return (
-		<Card class="mb-8">
-			<CardContent class="p-4 border  rounded-lg text-left">
-				<h2 class="text-lg font-semibold mb-2">User Data</h2>
-				<Show
-					when={hasSession()}
-					fallback="Sign in to view your linked accounts."
+		<div class="p-4 ">
+			<h2 class="text-lg font-semibold mb-2">User Data</h2>
+			<Show
+				when={hasSession()}
+				fallback="Sign in to view your linked accounts."
+			>
+				<Suspense
+					fallback={<p class="text-sm text-gray-500">Loading account…</p>}
 				>
-					<Suspense
-						fallback={<p class="text-sm text-gray-500">Loading account…</p>}
+					<div>rendered on: {isServer ? 'server' : 'client'}</div>
+					<Show
+						when={user()}
+						fallback={
+							<p class="text-sm text-gray-600">No linked accounts yet.</p>
+						}
 					>
-						<div>rendered on: {isServer ? 'server' : 'client'}</div>
-						<Show
-							when={user()}
-							fallback={
-								<p class="text-sm text-gray-600">No linked accounts yet.</p>
-							}
-						>
-							<UserProfile user={user()} />
-						</Show>
-					</Suspense>
-				</Show>
-			</CardContent>
-		</Card>
+						<UserProfile user={user()} />
+					</Show>
+				</Suspense>
+			</Show>
+		</div>
 	)
 }
 

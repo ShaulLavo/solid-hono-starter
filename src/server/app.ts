@@ -7,6 +7,7 @@ import env from '~/env/server'
 import { auth } from '~/lib/auth'
 import { authMiddleware } from './middleware'
 import { authRouter } from './routes/auth'
+import { syncRouter } from './routes/sync'
 
 const apiRouter = new Hono()
 	.post('/echo', zValidator('json', z.object({ msg: z.string() })), async c => {
@@ -22,12 +23,14 @@ const apiRouter = new Hono()
 		return c.json(accounts, 200)
 	})
 
-export const app = new Hono<{
+export type AppBindings = {
 	Variables: {
 		user: typeof import('~/lib/auth').auth.$Infer.Session.user | null
 		session: typeof import('~/lib/auth').auth.$Infer.Session.session | null
 	}
-}>()
+}
+
+export const app = new Hono<AppBindings>()
 	.basePath('/api')
 	.use(
 		'*',
@@ -43,6 +46,7 @@ export const app = new Hono<{
 	.use('*', authMiddleware)
 	.route('/', apiRouter)
 	.route('/auth', authRouter)
+	.route('/sync', syncRouter)
 	.notFound(c => c.text('Not Found :(', 404))
 
 export type AppType = typeof app
