@@ -3,6 +3,7 @@ import { onMount } from 'solid-js'
 import { Counter } from '~/components/Counter'
 import { WelcomeHeader } from '~/components/WelcomeHeader'
 import { client } from '~/lib/hono'
+import { log } from '~/lib/log'
 
 export default function Home() {
 	onMount(() => {

@@ -22,11 +22,7 @@ export function AppHeader() {
 			setSigningOut(false)
 		}
 	}
-	console.log('hasSession', hasSession())
-	createEffect(() => {
-		console.log('session data:', unwrap(session().data))
-		console.log('hasSession', hasSession())
-	})
+
 	return (
 		<header class="bg-background backdrop-blur">
 			<div class="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
